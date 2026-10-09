@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EGP STORE — Top Up Game Cepat & Aman</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <link rel="stylesheet" href="style.css"></link>
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">EGP<span>STORE</span></a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#home">Beranda</a>
+        <a href="#games">Game</a>
+        <a href="#cara">Cara Top Up</a>
+        <a href="#promo">Promo</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <button class="btn btn-primary nav-cta" onclick="openHistory()">📜 Riwayat <span class="badge-count" id="historyBadge">0</span></button>
+      <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <span class="badge">⚡ Proses Instan &lt; 30 detik</span>
+        <h1>Top Up Game Favoritmu <span class="highlight">Lebih Cepat</span></h1>
+        <p>Isi Diamond, UC, Genesis Crystal, dan ribuan item game lainnya dengan harga terjangkau. Pembayaran aman, langsung masuk ke akun.</p>
+        <div class="hero-search">
+          <input type="text" id="heroSearch" placeholder="Cari game... (misal: Mobile Legends)" />
+          <button class="btn btn-primary" onclick="scrollToGames()">Cari</button>
+        </div>
+        <div class="hero-stats">
+          <div><strong>2.5Jt+</strong><span>Transaksi</span></div>
+          <div><strong>50+</strong><span>Game</span></div>
+          <div><strong>4.9★</strong><span>Rating</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card" id="heroCard" aria-label="Game unggulan">
+          <div class="hero-card-img">
+            <img id="heroGameImage" src="gambar/Logo Game Mobile Legends.png" alt="Mobile Legends Logo">
+          </div>
+          <div class="hero-card-body">
+            <p id="heroGameName">Mobile Legends</p>
+            <div class="diamond-row">
+              <span id="heroNominalOne">💎 86 Diamond</span>
+              <strong id="heroPriceOne">Rp 22.000</strong>
+            </div>
+            <div class="diamond-row">
+              <span id="heroNominalTwo">💎 172 Diamond</span>
+              <strong id="heroPriceTwo">Rp 43.000</strong>
+            </div>
+            <button class="btn btn-primary btn-block" id="heroTopupButton" onclick="openTopup('ml')">Top Up Sekarang</button>
+            <div class="hero-slide-dots" id="heroSlideDots" role="group" aria-label="Pilih game unggulan"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAMES GRID -->
+  <section class="section" id="games">
+    <div class="container">
+      <div class="section-head">
+        <h2>Pilih Game</h2>
+        <p>Klik game untuk langsung top up</p>
+        <input type="text" id="gameFilter" class="filter-input" placeholder="🔍 Ketik nama game..." oninput="filterGames()" />
+      </div>
+      <div class="games-grid" id="gamesGrid"></div>
+    </div>
+  </section>
+
+  <!-- CARA TOP UP -->
+  <section class="section section-alt" id="cara">
+    <div class="container">
+      <div class="section-head">
+        <h2>Cara Top Up</h2>
+        <p>Hanya 3 langkah mudah</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Pilih Game</h3>
+          <p>Tentukan game dan nomor ID / User ID kamu.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Pilih Nominal</h3>
+          <p>Sesuaikan jumlah diamond / UC yang ingin dibeli.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Bayar</h3>
+          <p>Selesaikan pembayaran, item langsung masuk akun.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMO -->
+  <section class="section" id="promo">
+    <div class="container">
+      <div class="section-head">
+        <span class="promo-eyebrow">BONUS BUAT KAMU</span>
+        <h2>Promo Spesial</h2>
+        <p>Pilih penawaran favoritmu dan bikin momen gaming makin seru.</p>
+      </div>
+      <div class="promo-grid">
+        <div class="promo-card promo-main">
+          <div class="promo-main-content">
+            <span class="promo-tag">⚡ Hemat hingga 15%</span>
+            <h3>Flash Sale Weekend</h3>
+            <p>Waktunya tambah keseruan! Nikmati penawaran spesial untuk paket game favoritmu.</p>
+            <button class="btn btn-light" onclick="scrollToGames()">Cari Paket Game <span aria-hidden="true">→</span></button>
+          </div>
+          <span class="promo-art" aria-hidden="true">%</span>
+        </div>
+        <div class="promo-card">
+          <div class="promo-icon promo-icon-green" aria-hidden="true">🎁</div>
+          <span class="promo-tag promo-tag-green">Bonus Pemula</span>
+          <h3>Top Up Pertama</h3>
+          <p>Transaksi pertamamu makin seru dengan bonus ekstra untuk memulai petualangan.</p>
+          <button class="promo-link" onclick="scrollToGames()">Mulai top up <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="promo-card">
+          <div class="promo-icon promo-icon-purple" aria-hidden="true">👑</div>
+          <span class="promo-tag promo-tag-purple">VIP</span>
+          <h3>Member Loyalty</h3>
+          <p>Kumpulkan poin dari transaksi dan tukarkan dengan hadiah atau cashback menarik.</p>
+          <button class="promo-link" onclick="scrollToGames()">Kumpulkan poin <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="promo-card">
+          <div class="promo-icon promo-icon-cyan" aria-hidden="true">💳</div>
+          <span class="promo-tag promo-tag-cyan">Cashback</span>
+          <h3>Bayar Pakai E-Wallet</h3>
+          <p>Pilih pembayaran digital favoritmu dan nikmati kesempatan mendapat cashback.</p>
+          <button class="promo-link" onclick="scrollToGames()">Lihat game <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="promo-card">
+          <div class="promo-icon promo-icon-orange" aria-hidden="true">🎮</div>
+          <span class="promo-tag promo-tag-orange">Mabar Bareng</span>
+          <h3>Paket Squad</h3>
+          <p>Siapkan game bareng teman dengan pilihan paket hemat untuk sesi mabar berikutnya.</p>
+          <button class="promo-link" onclick="scrollToGames()">Pilih paket <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONI -->
+  <section class="section section-alt" id="testimoni">
+    <div class="container">
+      <div class="section-head">
+        <h2>Apa Kata Mereka</h2>
+        <p>Review dari pelanggan setia EGPSTORE</p>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>"Proses super cepat, diamond langsung masuk. Nggak perlu nunggu lama lagi!"</p>
+          <div class="testi-user">
+            <div class="avatar">R</div>
+            <div><strong>Rizky</strong><span>Mobile Legends</span></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>"Harga paling murah dibanding tempat lain. Admin juga ramah banget."</p>
+          <div class="testi-user">
+            <div class="avatar avatar-green">S</div>
+            <div><strong>Siti</strong><span>PUBG Mobile</span></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>"Sudah langganan 6 bulan. Selalu lancar, belum pernah gagal sekali pun."</p>
+          <div class="testi-user">
+            <div class="avatar avatar-purple">B</div>
+            <div><strong>Budi</strong><span>Genshin Impact</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-head">
+        <h2>Sering Ditanyakan</h2>
+        <p>Temukan jawabannya di sini</p>
+      </div>
+      <div class="faq-list" id="faqList"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container cta-inner">
+      <h2>Siap Top Up Sekarang?</h2>
+      <p>Jangan tunggu, langsung isi saldo game-mu sekarang juga!</p>
+      <button class="btn btn-light btn-lg" onclick="scrollToGames()">Mulai Top Up</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="#" class="logo">EGP<span>STORE</span></a>
+        <p>Platform top up game terpercaya dengan proses instan dan harga terbaik di Indonesia.</p>
+      </div>
+      <div>
+        <h4>Produk</h4>
+        <a href="#games">Diamond ML</a>
+        <a href="#games">UC PUBG</a>
+        <a href="#games">Genesis Crystal</a>
+        <a href="#games">Valorant Points</a>
+      </div>
+      <div>
+        <h4>Bantuan</h4>
+        <a href="#faq">FAQ</a>
+        <a href="#">Cara Top Up</a>
+        <a href="#">Hubungi CS</a>
+        <a href="#">Syarat & Ketentuan</a>
+      </div>
+      <div>
+        <h4>Ikuti Kami</h4>
+        <div class="social">
+          <a href="https://instagram.com/EGPSTORE_999" target="_blank" rel="noopener">
+            <span class="social-icon ig">📷</span>
+            <span>
+              <span class="social-name">Instagram</span><br/>
+              <span class="social-handle">@EGPSTORE_999</span>
+            </span>
+          </a>
+          <a href="https://tiktok.com/@EGPSTORE_999" target="_blank" rel="noopener">
+            <span class="social-icon tt">🎵</span>
+            <span>
+              <span class="social-name">TikTok</span><br/>
+              <span class="social-handle">@EGPSTORE_999</span>
+            </span>
+          </a>
+          <a href="https://youtube.com/@EGPSTORE_999" target="_blank" rel="noopener">
+            <span class="social-icon yt">▶</span>
+            <span>
+              <span class="social-name">YouTube</span><br/>
+              <span class="social-handle">@EGPSTORE_999</span>
+            </span>
+          </a>
+          <a href="https://discord.gg/EGPSTORE_999" target="_blank" rel="noopener">
+            <span class="social-icon dc">💬</span>
+            <span>
+              <span class="social-name">Discord</span><br/>
+              <span class="social-handle">EGPSTORE_999</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 EGPSTORE  . Prototype — bukan layanan nyata.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TOPUP MODAL -->
+  <div class="modal-overlay" id="topupModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeTopup()">✕</button>
+      <div class="modal-head">
+        <div class="modal-icon" id="modalIcon">🎮</div>
+        <div>
+          <h3 id="modalTitle">Game</h3>
+          <p id="modalDesc">Masukkan ID & pilih nominal</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label id="idLabel">User ID</label>
+          <div class="id-input-row">
+            <input type="text" id="userId" placeholder="Masukkan ID" />
+            <input type="text" id="zoneId" placeholder="Zone ID" />
+          </div>
+          <small>Contoh: 12345678 (901234)</small>
+        </div>
+        <div class="form-group">
+          <label>Nominal</label>
+          <div class="nominal-grid" id="nominalGrid"></div>
+        </div>
+        <div class="form-group">
+          <label>Metode Pembayaran</label>
+          <div class="pay-methods" id="payMethods"></div>
+        </div>
+        <div class="summary">
+          <div class="summary-row"><span>Total</span><strong id="totalPrice">Rp 0</strong></div>
+          <button class="btn btn-primary btn-block" onclick="checkout()">Bayar Sekarang</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY MODAL -->
+  <div class="hist-modal-overlay" id="histModal">
+    <div class="hist-modal">
+      <div class="hist-header">
+        <h3>📜 Riwayat Top Up</h3>
+        <button class="modal-close" onclick="closeHistory()">✕</button>
+      </div>
+      <div class="hist-body" id="histBody"></div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER SUPPORT CHAT -->
+  <aside class="support-chat" aria-label="Bantuan pelanggan">
+    <section class="chat-panel" id="chatPanel" aria-labelledby="chatTitle" aria-hidden="true">
+      <header class="chat-header">
+        <div class="chat-avatar" aria-hidden="true">🤖</div>
+        <div class="chat-heading">
+          <h2 id="chatTitle">Asisten EGPSTORE</h2>
+          <p><span class="chat-status-dot"></span> Bot otomatis aktif 24/7</p>
+        </div>
+        <button class="chat-close" id="chatClose" type="button" aria-label="Tutup chat">×</button>
+      </header>
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-relevant="additions">
+        <div class="chat-message bot-message">
+          <p>Hai! 👋 Ada yang bisa aku bantu? Tanyakan seputar top up, pembayaran, atau kendala pesanan.</p>
+          <time>Asisten otomatis · 24/7</time>
+        </div>
+      </div>
+      <div class="chat-quick-replies" aria-label="Pertanyaan yang sering ditanyakan">
+        <button type="button" data-chat-question="Bagaimana cara top up?">Cara top up</button>
+        <button type="button" data-chat-question="Pembayaran saya bagaimana?">Pembayaran</button>
+        <button type="button" data-chat-question="Top up saya belum masuk">Top up belum masuk</button>
+      </div>
+      <form class="chat-form" id="chatForm">
+        <label class="visually-hidden" for="chatInput">Tulis pertanyaan</label>
+        <input id="chatInput" type="text" placeholder="Tulis pertanyaan..." autocomplete="off" maxlength="300" />
+        <button type="submit" aria-label="Kirim pesan">➤</button>
+      </form>
+      <p class="chat-disclaimer">Balasan otomatis untuk demo. Belum terhubung ke petugas live.</p>
+    </section>
+    <button class="chat-launcher" id="chatLauncher" type="button" aria-label="Buka chat bantuan" aria-expanded="false" aria-controls="chatPanel">
+      <span class="chat-launcher-icon" aria-hidden="true">💬</span>
+      <span class="chat-launcher-label">Butuh bantuan?</span>
+      <span class="chat-launcher-dot" aria-hidden="true"></span>
+    </button>
+  </aside>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- PAYMENT / QR MODAL -->
+  <div class="pay-modal-overlay" id="payModal">
+    <div class="pay-modal">
+      <div class="pay-modal-header">
+        <div class="check-icon">✓</div>
+        <h3>Pembayaran Berhasil Dibuat</h3>
+        <p>Scan QR di bawah untuk menyelesaikan pembayaran</p>
+      </div>
+      <div class="pay-modal-body">
+        <div class="order-info">
+          <div class="order-row"><span>No. Pesanan</span><strong id="orderNo">TRX-000000</strong></div>
+          <div class="order-row"><span>Game</span><strong id="orderGame">—</strong></div>
+          <div class="order-row"><span>Nominal</span><strong id="orderNominal">—</strong></div>
+          <div class="order-row"><span>ID Akun</span><strong id="orderUser">—</strong></div>
+          <div class="order-row"><span>Metode</span><strong id="orderPay">—</strong></div>
+          <div class="order-row total-row"><span>Total Bayar</span><strong id="orderTotal">Rp 0</strong></div>
+        </div>
+
+        <div class="qr-box">
+          <div class="qr-label">Scan dengan aplikasi e-wallet / m-banking</div>
+          <div id="qrCodeContainer"></div>
+          <div class="qr-merchant">
+            EGPSTORE Payment
+            <small id="qrPayName">QRIS</small>
+          </div>
+        </div>
+
+        <div class="copy-amount" onclick="copyAmount()" title="Klik untuk salin nominal">
+          <span class="amount-val" id="copyAmountVal">Rp 0</span>
+          <span class="copy-btn" id="copyBtnText">📋 Salin Nominal</span>
+        </div>
+
+        <div class="timer-bar">
+          Selesaikan pembayaran dalam <strong id="payTimer">05:00</strong>
+        </div>
+
+        <div class="pay-steps">
+          <h4>Cara Pembayaran:</h4>
+          <ol>
+            <li>Buka aplikasi e-wallet / m-banking kamu</li>
+            <li>Pilih menu <strong>Scan QR</strong> / <strong>Bayar</strong></li>
+            <li>Scan QR di atas</li>
+            <li>Pastikan nominal sesuai lalu bayar</li>
+            <li>Klik tombol "Saya Sudah Bayar" setelah sukses</li>
+          </ol>
+        </div>
+
+        <div class="pay-actions">
+          <button class="btn btn-primary btn-block btn-paid" onclick="confirmPayment()">✓ Saya Sudah Bayar</button>
+          <button class="btn btn-block" style="background:var(--card);color:var(--text);border:1px solid var(--border)" onclick="closePayModal()">Batal / Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
