@@ -246,6 +246,7 @@
 
     // ========== STATE ==========
     const STORAGE_HISTORY_KEY = "nyaigaul_history";
+    const STORAGE_REVIEWS_KEY = "egpstore_reviews";
     const $ = (id) => document.getElementById(id);
 
     const state = {
@@ -364,6 +365,98 @@
       heroSlideTimer = setInterval(() => {
         renderHeroSlide((heroSlideIndex + 1) % games.length);
       }, 4500);
+    }
+
+    // ========== CUSTOMER REVIEWS ==========
+    function getReviews() {
+      try {
+        const raw = localStorage.getItem(STORAGE_REVIEWS_KEY);
+        const reviews = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(reviews)) throw new Error("Invalid review data");
+        return reviews.filter((review) =>
+          review &&
+          typeof review.name === "string" &&
+          typeof review.message === "string" &&
+          Number.isInteger(Number(review.rating)) &&
+          Number(review.rating) >= 1 &&
+          Number(review.rating) <= 5 &&
+          typeof review.date === "string"
+        );
+      } catch (error) {
+        showToast("Ulasan di perangkat ini tidak dapat dibaca.");
+        return [];
+      }
+    }
+
+    function renderReviews() {
+      const list = $("reviewList");
+      const average = $("reviewAverage");
+      const averageStars = $("reviewAverageStars");
+      const count = $("reviewCount");
+      if (!list || !average || !averageStars || !count) return;
+
+      const reviews = getReviews();
+      const total = reviews.reduce((sum, review) => sum + Number(review.rating), 0);
+      const score = reviews.length ? total / reviews.length : 0;
+
+      average.textContent = reviews.length ? score.toFixed(1) : "—";
+      averageStars.textContent = reviews.length
+        ? `${"★".repeat(Math.round(score))}${"☆".repeat(5 - Math.round(score))}`
+        : "☆☆☆☆☆";
+      averageStars.setAttribute("aria-label", reviews.length ? `Rata-rata ${score.toFixed(1)} dari 5 bintang` : "Belum ada rating");
+      count.textContent = reviews.length
+        ? `${reviews.length} ulasan`
+        : "Belum ada ulasan";
+
+      if (!reviews.length) {
+        list.innerHTML = '<div class="review-empty">Jadilah pelanggan pertama yang memberi ulasan.</div>';
+        return;
+      }
+
+      list.replaceChildren();
+      reviews.forEach((review) => {
+        const card = document.createElement("article");
+        card.className = "testi-card";
+
+        const stars = document.createElement("div");
+        stars.className = "stars";
+        stars.textContent = `${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}`;
+        stars.setAttribute("aria-label", `${review.rating} dari 5 bintang`);
+
+        const message = document.createElement("p");
+        message.className = "review-message";
+        message.textContent = review.message;
+
+        const user = document.createElement("div");
+        user.className = "testi-user";
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = review.name.trim().charAt(0).toUpperCase();
+        avatar.setAttribute("aria-hidden", "true");
+
+        const details = document.createElement("div");
+        const name = document.createElement("strong");
+        name.textContent = review.name;
+        const date = document.createElement("span");
+        date.textContent = review.date;
+        details.append(name, date);
+        user.append(avatar, details);
+        card.append(stars, message, user);
+        list.append(card);
+      });
+    }
+
+    function saveReview(review) {
+      try {
+        const reviews = getReviews();
+        reviews.unshift(review);
+        localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(reviews));
+        return true;
+      } catch (error) {
+        showToast("Ulasan gagal disimpan. Coba lagi di perangkat ini.");
+        return false;
+      }
     }
 
     // ========== RENDER FAQ ==========
@@ -746,6 +839,8 @@
     }
 
     function openHistory() {
+      const navLinks = $("navLinks");
+      if (navLinks) navLinks.classList.remove("open");
       renderHistory();
       const histModal = $("histModal");
       if (histModal) histModal.classList.add("active");
@@ -924,6 +1019,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       renderGames();
       renderFAQ();
+      renderReviews();
       updateHistoryBadge();
       renderHeroSlide(heroSlideIndex);
       startHeroCarousel();
@@ -943,6 +1039,30 @@
         hamburger.addEventListener("click", () => {
           const navLinks = $("navLinks");
           if (navLinks) navLinks.classList.toggle("open");
+        });
+      }
+
+      const reviewForm = $("reviewForm");
+      if (reviewForm) {
+        reviewForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const formData = new FormData(reviewForm);
+          const review = {
+            name: String(formData.get("name") || "").trim(),
+            rating: Number(formData.get("rating")),
+            message: String(formData.get("message") || "").trim(),
+            date: new Date().toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            }),
+          };
+          if (!review.name || !review.message || !review.rating) return;
+          if (saveReview(review)) {
+            reviewForm.reset();
+            renderReviews();
+            showToast("Terima kasih, ulasanmu berhasil disimpan.");
+          }
         });
       }
 
